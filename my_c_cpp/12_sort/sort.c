@@ -19,7 +19,7 @@ void print_arr(int *arr, int cnt)
 }
 
 /**
- * 有哨兵实现
+ * 有哨兵实现 
 */
 void merge_guard(int *arr, int left, int right)
 {
