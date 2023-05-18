@@ -165,17 +165,125 @@ void test_merge_sort()
     int arr[] = {3, 2, 7, 6, 2, 8};
     int cnt = sizeof(arr) / sizeof(arr[0]);
 
-    merge_sort(arr, 0);
-    merge_sort(arr, 1);
-    merge_sort(arr, 2);
-    merge_sort(arr, 3);
-    merge_sort(arr, 4);
+    // merge_sort(arr, 0);
+    // merge_sort(arr, 1);
+    // merge_sort(arr, 2);
+    // merge_sort(arr, 3);
+    // merge_sort(arr, 4);
     merge_sort(arr, 5);
-    merge_sort(arr, 6);
+    // merge_sort(arr, 6);
+}
+
+void swap(int *v1, int *v2)
+{
+    int tmp = 0;
+    tmp = *v1;
+    *v1 = *v2;
+    *v2 = tmp;
+}
+
+int partition(int *arr, int left, int right)
+{
+    int i = left;   // i为arr的索引，i的左侧都不大于arr[right]
+    int j = left;
+    int tmp = 0;
+
+    for (j = left; j < right; j++)  // 使用j遍历right左侧节点，将不大于arr[right]的节点交换到i的左侧
+    {
+        if (arr[j] <= arr[right])
+        {
+            swap(&arr[i], &arr[j]);
+            i++;
+        }
+    }
+
+    swap(&arr[i], &arr[right]); // 循环结束后，[left, right-1]范围不大于arr[right]的都已放到i的左侧；i就是arr[right]应该放的位置
+    return i;
+}
+
+/**
+ * 取一个元素为分割点，小于它的放在左边，大于它的放在右边
+*/
+void quick_sort_c(int *arr, int left, int right)
+{
+    int pos = 0;
+
+    if (NULL == arr || left >= right)
+    {
+        return;
+    }
+
+    pos = partition(arr, left, right);
+    quick_sort_c(arr, left, pos - 1);
+    quick_sort_c(arr, pos + 1, right);
+}
+
+void quick_sort(int *arr, int cnt)
+{
+    quick_sort_c(arr, 0, cnt - 1);
+    print_arr(arr, cnt);
+}
+
+void test_quick_sort()
+{
+    int arr[] = {3, 2, 7, 6, 2, 8};
+    int cnt = sizeof(arr) / sizeof(arr[0]);
+
+    // quick_sort(arr, 0);
+    // quick_sort(arr, 1);
+    // quick_sort(arr, 2);
+    // quick_sort(arr, 3);
+    // quick_sort(arr, 4);
+    // quick_sort(arr, 5);
+    quick_sort(arr, 6);
+}
+
+
+void find_k_min(int *arr, int cnt, int k)
+{
+    int pos = 0;
+    int begin = 0;
+    int end = cnt - 1;
+
+    if (NULL == arr || cnt < k)
+    {
+        printf("------%s(%d): invalid args------\n", __FUNCTION__, __LINE__);
+        return;
+    }
+
+    while(1)
+    {
+        pos = partition(arr, begin, end);
+        if (pos == k - 1)
+        {
+            printf("k min = %d\n", arr[pos]);
+            break;
+        }
+        else if (pos > k - 1)
+        {
+            end = pos - 1;
+        }
+        else
+        {
+            begin = pos + 1;
+        }
+    }
+}
+
+// 假定数组的元素各不相同
+void test_find_k_min()
+{
+    int arr[] = {3, 2, 7, 6, 8};
+    int cnt = sizeof(arr) / sizeof(arr[0]);
+
+    find_k_min(arr, cnt, 3);
+
 }
 
 int main()
 {
-    test_merge_sort();
+    // test_merge_sort();
+    // test_quick_sort();
+    test_find_k_min();
     return 0;
 }
